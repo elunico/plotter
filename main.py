@@ -1,7 +1,11 @@
 import math
+
 from plotter.graph import Graph
 from plotter.mathfunction import MathFunction
 from plotter.axes import Axes
+
+# from plotter.everything import *
+# import plotter.everything as plotter
 
 import numpy as np
 
