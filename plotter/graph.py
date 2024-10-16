@@ -16,6 +16,7 @@ class Graph:
         show_legend: bool = True,
         title: str | None = None,
         axes: Axes = Axes(x_label="x", y_label="y"),
+        show_on_click: bool = False,
         plotter=plt,
     ) -> None:
         self.funcs = funcs
@@ -24,6 +25,7 @@ class Graph:
         self.show_legend = show_legend
         self.title = title
         self.plotter = plotter
+        self.show_on_click = show_on_click
 
         self.grid = True
 
@@ -54,7 +56,17 @@ class Graph:
 
     def show(self):
         self.compute()
+
         # always assigns [...] to self._yvals
+
+        self.plotter.xlabel(self.axes.x_label)
+        self.plotter.ylabel(self.axes.y_label)
+        self.plotter.title(
+            f"Plot of {self.funcs[0].__name__} with bounds {(self.x_min, self.x_max)}"
+            if self.title is None
+            else self.title
+        )
+        self.plotter.grid(self.grid)
 
         # Plot the function
 
@@ -74,14 +86,8 @@ class Graph:
                     y_val,
                     label=f"{self.funcs[index].__name__}",
                 )
-        self.plotter.xlabel(self.axes.x_label)
-        self.plotter.ylabel(self.axes.y_label)
-        self.plotter.title(
-            f"Plot of {self.funcs[0].__name__} with bounds {(self.x_min, self.x_max)}"
-            if self.title is None
-            else self.title
-        )
+
         if self.show_legend:
             self.plotter.legend()
-        self.plotter.grid(self.grid)
-        self.plotter.show()
+
+        self.plotter.show(block=True)

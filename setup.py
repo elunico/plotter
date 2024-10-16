@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="plotter-elunico",
-    version="0.1.0",
+    version="0.2.0",
     author="Thomas Povinelli",
     author_email="tompov227@gmail.com",
     description="WORK IN PROGRESS - A friendlier wrapper around matplotlib",

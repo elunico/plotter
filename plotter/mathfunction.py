@@ -17,6 +17,8 @@ class _ColorIterator:
 class MathFunctionBase(abc.ABC):
     __colorizer = _ColorIterator()
 
+    default_color: str | None = None
+
     def __init__(
         self,
         *,
@@ -25,14 +27,17 @@ class MathFunctionBase(abc.ABC):
         line_style: str = "-",
     ):
         self.series_name = series_name if series_name is not None else "?"
+        self.line_style = line_style
         if color is None:
-            self.color = next(type(self).__colorizer)
+            if MathFunctionBase.default_color is not None:
+                self.color = MathFunctionBase.default_color
+            else:
+                self.color = next(type(self).__colorizer)
         else:
             self.color = color
-        self.line_style = line_style
 
     @abc.abstractmethod
-    def __call__(xs: XRange) -> XRange:
+    def __call__(self, xs: XRange) -> XRange:
         """
         the __call__ function should accept a range of x values and return their resulting y values
         """
@@ -40,11 +45,16 @@ class MathFunctionBase(abc.ABC):
             "Subclass must implement __call__ or use MathFunction concrete class"
         )
 
+    @property
+    def __name__(self) -> str:
+        return self.series_name if self.series_name is not None else self.__name__
+
 
 class MathFunction(MathFunctionBase):
     def __init__(
         self,
         relation: typing.Callable[[XRange], XRange],
+        *,
         series_name: str | None = None,
         color: str | None = None,
         line_style: str = "-",
